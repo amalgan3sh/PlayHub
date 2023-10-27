@@ -307,6 +307,20 @@ class Onlinecontroller extends CI_Controller {
 			$this->index();
 		}
 	}
+
+	public function userViewTurfImages(){
+		if( $this->session->userdata('id'))
+		{ 
+			$user_id = $this->session->userdata('id');
+			$turf_id = $this->input->get_post('turf_id');
+			$data['images'] = $this->Onlinemodel->userViewTurfImages($turf_id);
+			$this->load->view('user/user_header');
+			$this->load->view('user/user_view_turf_images',$data);
+			$this->load->view('admin/admin_footer');
+		}else{
+			$this->index();
+		}
+	}
 	public function userCancelBooking(){
 		if( $this->session->userdata('id'))
 		{ 
@@ -326,6 +340,43 @@ class Onlinecontroller extends CI_Controller {
 			$this->load->view('user/user_header');
 			$this->load->view('user/user_give_feedback',$data);
 			$this->load->view('admin/admin_footer');
+
+		}else{
+			$this->index();
+		}
+	}
+
+	public function userGiveFeedbackToPropreitor(){
+		if( $this->session->userdata('id'))
+		{ 
+			$user_id = $this->session->userdata('id');
+			$turf_id = $this->input->get_post('turf_id');
+			$data['feedback'] = $this->Onlinemodel->getUserFeedbackPropreitor($user_id, $turf_id);
+			$this->load->view('user/user_header');
+			$this->load->view('user/user_give_feedback_to_propreitor',$data);
+			$this->load->view('admin/admin_footer');
+
+		}else{
+			$this->index();
+		}
+	}
+
+	public function userAddFeedbackPropreitor(){
+		if( $this->session->userdata('id'))
+		{ 
+			$user_id = $this->session->userdata('id');
+			$feedback = $this->input->get_post('feedback');
+			$turf_id = $this->input->get_post('turf_id');
+			$response = $this->Onlinemodel->userAddFeedbackPropreitor($user_id,$feedback,$turf_id);
+			
+			if($response==1){
+				?>
+				<script type="text/javascript">
+				alert('Feedback Added');
+				</script> 
+				<?php 
+				$this->userGiveFeedbackToPropreitor();
+			}
 
 		}else{
 			$this->index();
@@ -639,6 +690,59 @@ public function sentPaymentConfirmationSMStoUser($user_phone_number) {
 			$data['bookings'] = $this->Onlinemodel->turfViewBookings($turf_id);
 			$this->load->view('turf/turf_header');
 			$this->load->view('turf/turf_view_bookings',$data);
+			$this->load->view('admin/admin_footer');
+		}else{
+			$this->index();
+		}
+	}
+	public function turfViewImages(){
+		if( $this->session->userdata('id'))
+		{ 
+			$turf_id = $this->session->userdata('id');
+			$data['images'] = $this->Onlinemodel->turfViewImages($turf_id);
+			$this->load->view('turf/turf_header');
+			$this->load->view('turf/turf_add_images',$data);
+			$this->load->view('admin/admin_footer');
+		}else{
+			$this->index();
+		}
+	}
+	public function turfAddImages(){
+		if( $this->session->userdata('id'))
+		{ 
+			$turf_id = $this->session->userdata('id');
+		if (isset($_POST['btnsave'])) {
+		    $id = $_POST['id'];
+		    $image = $_FILES['image'];
+
+		    if ($image['error'] === UPLOAD_ERR_OK) {
+		        $projectRoot = "C:/wamp64/www/Playhub";
+				$uploadFolder = $projectRoot . '/assets/turf_images/'; // Adjust 'uploads' to your desired folder name
+				$uploadFile = $uploadFolder . basename($image['name']);
+
+		        if (move_uploaded_file($image['tmp_name'], $uploadFile)) {
+		            // File was successfully uploaded. Now, you can store the image path in the database.
+		            $imagePath = $uploadFile;  // Adjust this as needed based on your folder structure.
+		            // Perform database insert or update with $imagePath.
+		            $this->Onlinemodel->turfAddImages($turf_id,$imagePath);
+		            $this->turfViewImages();
+
+		            // After the database operation, you may want to redirect the user or display a success message.
+		        } else {
+		            // Handle the case where the file couldn't be moved.
+		        }
+		    }
+		}
+	}
+	}
+
+		public function turfViewFeedback(){
+		if( $this->session->userdata('id'))
+		{ 
+			$turf_id = $this->session->userdata('id');
+			$data['bookings'] = $this->Onlinemodel->turfViewFeedback($turf_id);
+			$this->load->view('turf/turf_header');
+			$this->load->view('turf/turf_view_feedback',$data);
 			$this->load->view('admin/admin_footer');
 		}else{
 			$this->index();

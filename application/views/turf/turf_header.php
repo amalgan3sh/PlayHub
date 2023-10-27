@@ -76,6 +76,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
           <li>
             <a href="<?php echo site_url(); ?>/Onlinecontroller/turfViewBookings">Bookings</a>
           </li>
+          <li>
+            <a href="<?php echo site_url(); ?>/Onlinecontroller/turfViewImages">Add Images</a>
+          </li>
+          <li>
+            <a href="<?php echo site_url(); ?>/Onlinecontroller/turfViewFeedback">Feedback</a>
+          </li>
             <li  class="btn w3ls-btn">
             <a href="<?php echo site_url(); ?>/Onlinecontroller/adminLogout">Logout</a>
           </li>

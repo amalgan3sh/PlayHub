@@ -15,12 +15,24 @@ class Onlinemodel extends CI_Model {
 		$response = $this->db->query('select * from turf');
         return $response;
 	}
+	public function turfViewImages($turf_id){
+		$response = $this->db->query("select * from images where turf_id='$turf_id'");
+        return $response;
+	}
+	public function turfAddImages($turf_id,$image_path){
+		$response = $this->db->query("INSERT INTO images(`turf_id`,`image_path`) VALUES('$turf_id','$image_path')");
+        return $response;
+	}
 	public function ResetPassword($phonenumber,$confirmpassword){
 		$response = $this->db->query("UPDATE `user` SET `password`='$confirmpassword' WHERE `phone` = '$phonenumber'");
         return $response;
 	}
 	public function userAddFeedback($user_id,$feedback){
 		$response = $this->db->query("INSERT INTO `feedback` (`user_id`,`description`,`datetime`)VALUES('$user_id','$feedback',CURDATE())");
+        return $response;
+	}
+	public function userAddFeedbackPropreitor($user_id,$feedback,$turf_id){
+		$response = $this->db->query("INSERT INTO `feedback` (`user_id`,`description`,`datetime`,`turf_id`)VALUES('$user_id','$feedback',CURDATE(),'$turf_id')");
         return $response;
 	}
 	public function adminUpdateTurf($id,$data){
@@ -35,6 +47,13 @@ class Onlinemodel extends CI_Model {
 	}
 	public function getUserFeedback($id){
 		$this -> db -> where('user_id', $id);
+		$this -> db -> where('turf_id', '0');
+		$response = $this->db->get('feedback');	
+		return $response;
+	}
+	public function getUserFeedbackPropreitor($user_id,$turf_id){
+		$this -> db -> where('user_id', $user_id);
+		$this -> db -> where('turf_id', $turf_id);
 		$response = $this->db->get('feedback');	
 		return $response;
 	}
@@ -74,6 +93,12 @@ class Onlinemodel extends CI_Model {
 	}
 	public function getUserChallengers($user_id){
 		$response = $this->db->query("SELECT CONCAT(user.first_name,' ',user.last_name) AS challenger_name,user_id,turf_id FROM `bookings` INNER JOIN USER USING (user_id) WHERE booking_date = CURDATE() AND user_id!=$user_id");	
+		return $response;
+	}
+	public function userViewTurfImages($turf_id){
+		$this->db->from('images');
+		$this->db->where('turf_id', $turf_id );
+		$response = $this->db->get();
 		return $response;
 	}
 	public function userChallengeUser($from_user_id,$to_user_id,$turf_id){
@@ -159,6 +184,10 @@ class Onlinemodel extends CI_Model {
 	}
 	public function turfViewBookings($turf_id){
 		$response = $this->db->query("SELECT booking_date,bookings.status,CONCAT(first_name,last_name) AS username,turf.location,slot_time,week_name FROM `bookings` INNER JOIN turf USING (turf_id) INNER JOIN USER USING(user_id) INNER JOIN slots USING(slot_id) INNER JOIN `week` USING (week_id) WHERE turf_id='$turf_id' AND `booking_date` >= CURDATE()");	
+		return $response;
+	}
+	public function turfViewFeedback($turf_id){
+		$response = $this->db->query("SELECT *,CONCAT(first_name,' ',last_name) AS username FROM `feedback` INNER JOIN USER USING(user_id) WHERE turf_id='$turf_id'");	
 		return $response;
 	}
 	public function admnViewBookings(){

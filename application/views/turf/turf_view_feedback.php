@@ -9,35 +9,35 @@
                             opacity: 0.7;
                         }
                     </style>
+</head>
 <body>
-    <h1>PROPRIETOR'S</h1>
-        <table id="dataTable" class="table">
+	<center>
+		<h1>FEEDBACK</h1>
+		<table id="dataTable" class="table">
             <thead>
             <tr>
                 <th>Sno</th>
-                <th>Proprietor's Name</th>
-                <th>Location</th>
+                <th>Users name</th>
+                <th>Feedback</th>
+                <th>Date</th>
             </tr>
             </thead>
             <tbody id="myTable">
                 <?php 
                     $n=1; 
-                    foreach($turf->result() as $row)
+                    foreach($bookings->result() as $row)
                     {?>
                         <tr>
                         <td><?php echo $n;?></td>
-                        <td><?php echo $row->turf_name;?></td>
-                        <td><?php echo $row->location;?></td>
-                        <td><?php echo $row->location;?></td>
-                        <td><a href="<?php echo site_url(); ?>/Onlinecontroller/userSelectWeek?turf_id=<?php echo $row->turf_id;?>">View Slots</a></td>
-                        <td><a href="<?php echo site_url(); ?>/Onlinecontroller/userGiveFeedbackToPropreitor?turf_id=<?php echo $row->turf_id;?>">Give feedback</a></td>
-                        <td><a href="<?php echo site_url(); ?>/Onlinecontroller/userViewTurfImages?turf_id=<?php echo $row->turf_id;?>">Turf Images</a></td>
+                        <td><?php echo $row->username;?></td>
+                        <td><?php echo $row->description;?></td>
+                        <td><?php echo $row->datetime;?></td>
                     </tr>
                 <?php  $n++;}?>
             </tbody>
         </table>
-
- </div>
+	</center>
+  </div>
             </div>
         </div>
     </div>
